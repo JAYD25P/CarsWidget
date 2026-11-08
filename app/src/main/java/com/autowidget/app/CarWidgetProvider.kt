@@ -38,6 +38,13 @@ class CarWidgetProvider: AppWidgetProvider() {
             views.setImageViewResource(R.id.car_art,car.art)
             manager.updateAppWidget(id,views)
         }
+        fun scheduleAnimation(context:Context, enabled:Boolean) {
+            context.getSharedPreferences("auto_widget",Context.MODE_PRIVATE).edit().putBoolean("animate_any",enabled).apply()
+            val intent=Intent(context,CarWidgetProvider::class.java).setAction(ACTION_NEXT_FRAME)
+            val pending=PendingIntent.getBroadcast(context,7001,intent,PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            val alarm=context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            if(enabled) scheduleNext(context) else alarm.cancel(pending)
+        }
         private fun scheduleNext(context:Context) {
             val prefs=context.getSharedPreferences("auto_widget",Context.MODE_PRIVATE)
             if(!prefs.getBoolean("animate_any",false)) return
