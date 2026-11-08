@@ -1,4 +1,1 @@
-<resources>
-    <string name="app_name">AutoWidget</string>
-    <string name="widget_description">Your automotive collection on the home screen</string>
-</resources>
+<resources><string name="app_name">MOTORVAULT</string><string name="widget_description">Your automotive art collection on the home screen</string></resources>
