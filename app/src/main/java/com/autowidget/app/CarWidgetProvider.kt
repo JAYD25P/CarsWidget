@@ -34,8 +34,17 @@ class CarWidgetProvider: AppWidgetProvider() {
                 val index=((System.currentTimeMillis()/4500L)%ids.size).toInt()
                 CarCatalog.byId(ids[index])
             } else CarCatalog.byId(selected)
-            val views=RemoteViews(context.packageName,R.layout.car_widget)
-            views.setImageViewResource(R.id.car_art,car.art)
+            val layoutMode=prefs.getString("layout_mode","single")
+            val views=if(layoutMode=="collection") {
+                RemoteViews(context.packageName,R.layout.car_collection_widget).apply {
+                    val offset=if(animated) ((System.currentTimeMillis()/4500L)%CarCatalog.cars.size).toInt() else CarCatalog.cars.indexOf(car).coerceAtLeast(0)
+                    setImageViewResource(R.id.car_one,CarCatalog.cars[offset%CarCatalog.cars.size].art)
+                    setImageViewResource(R.id.car_two,CarCatalog.cars[(offset+1)%CarCatalog.cars.size].art)
+                    setImageViewResource(R.id.car_three,CarCatalog.cars[(offset+2)%CarCatalog.cars.size].art)
+                }
+            } else {
+                RemoteViews(context.packageName,R.layout.car_widget).apply { setImageViewResource(R.id.car_art,car.art) }
+            }
             manager.updateAppWidget(id,views)
         }
         fun scheduleAnimation(context:Context, enabled:Boolean) {
