@@ -32,6 +32,7 @@ fun AutoWidgetScreen(context:Context) {
     val prefs=context.getSharedPreferences("auto_widget",Context.MODE_PRIVATE)
     var selected by remember { mutableStateOf(prefs.getString("default_car","sports")?:"sports") }
     var animated by remember { mutableStateOf(prefs.getBoolean("animate_any",false)) }
+    var layoutMode by remember { mutableStateOf(prefs.getString("layout_mode","single")?:"single") }
     var category by remember { mutableStateOf("All") }
     val categories=listOf("All","Performance","SUV","Classic","Passenger","Utility","Two-wheel","Commercial","Motorsport","Electric")
     val shown=CarCatalog.cars.filter { category=="All" || it.category==category }
@@ -50,8 +51,12 @@ fun AutoWidgetScreen(context:Context) {
                             Switch(checked=animated,onCheckedChange={animated=it;prefs.edit().putBoolean("animate_any",it).apply()})
                             Text("Animated collection rotation",color=Color.White)
                         }
+                        Row(horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                            FilterChip(selected=layoutMode=="single",onClick={layoutMode="single"},label={Text("Single car")})
+                            FilterChip(selected=layoutMode=="collection",onClick={layoutMode="collection"},label={Text("Collection")})
+                        }
                         Button(onClick={
-                            prefs.edit().putString("default_car",selected).apply()
+                            prefs.edit().putString("default_car",selected).putString("layout_mode",layoutMode).apply()
                             val mgr=AppWidgetManager.getInstance(context)
                             val ids=mgr.getAppWidgetIds(ComponentName(context,CarWidgetProvider::class.java))
                             ids.forEach { CarWidgetProvider.render(context,mgr,it) }
