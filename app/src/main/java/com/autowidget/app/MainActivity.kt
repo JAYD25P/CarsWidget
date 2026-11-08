@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -15,6 +16,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,17 +55,15 @@ fun AutoWidgetScreen(context:Context) {
                             val mgr=AppWidgetManager.getInstance(context)
                             val ids=mgr.getAppWidgetIds(ComponentName(context,CarWidgetProvider::class.java))
                             ids.forEach { CarWidgetProvider.render(context,mgr,it) }
-                            CarWidgetProvider::class.java
+                            CarWidgetProvider.scheduleAnimation(context, animated)
                         },modifier=Modifier.fillMaxWidth()) { Text("Apply to home-screen widgets") }
                     }
                 }
                 Spacer(Modifier.height(18.dp))
                 Text("COLLECTION",color=Color.White,style=MaterialTheme.typography.titleLarge,fontWeight=FontWeight.Bold)
                 Spacer(Modifier.height(8.dp))
-                androidx.compose.foundation.horizontalScroll(rememberScrollState()).let { scroll ->
-                    Row(Modifier.fillMaxWidth().then(scroll),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                Row(Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),horizontalArrangement=Arrangement.spacedBy(8.dp)) {
                         categories.forEach { c -> FilterChip(selected=category==c,onClick={category=c},label={Text(c)}) }
-                    }
                 }
                 LazyVerticalGrid(columns=GridCells.Fixed(2),contentPadding=PaddingValues(vertical=10.dp),horizontalArrangement=Arrangement.spacedBy(10.dp),verticalArrangement=Arrangement.spacedBy(10.dp),modifier=Modifier.weight(1f)) {
                     items(shown) { car ->
