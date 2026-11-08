@@ -43,7 +43,7 @@ val downloadVehicleArtwork by tasks.registering {
                 logger.lifecycle("Downloading CC0 vehicle artwork: $fileName")
                 val connection = java.net.URL(source).openConnection()
                 connection.setRequestProperty("User-Agent", "CarsWidget-AndroidBuild/1.1")
-                connection.getInputStream().use { input -> target.outputStream().use(input::copyTo) }
+                connection.getInputStream().use { input -> target.outputStream().use { output -> input.copyTo(output) } }
                 require(target.length() > 0L) { "Downloaded asset is empty: $fileName" }
             }
         }
