@@ -1,3 +1,5 @@
+import java.net.URL
+
 plugins {
  id("com.android.application")
  id("org.jetbrains.kotlin.android")
@@ -31,13 +33,13 @@ val fetchVehicleLibrary by tasks.registering {
    "car_concept_preview.jpg" to "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/CarConcept/screenshot/screenshot_Large.jpg",
    "toy_car_preview.jpg" to "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/ToyCar/screenshot/screenshot_large.jpg"
   )
-  images.forEach{(name,url)-> val f=drawable.resolve(name); if(!f.exists()||f.length()==0L){ val c=java.net.URL(url).openConnection(); c.connectTimeout=30000;c.readTimeout=60000;c.setRequestProperty("User-Agent","MOTORVAULT/1.2");c.getInputStream().use{i->f.outputStream().use{o->i.copyTo(o)}};require(f.length()>0){"Empty image $name"} } }
+  images.forEach{(name,url)-> val f=drawable.resolve(name); if(!f.exists()||f.length()==0L){ val c=URL(url).openConnection(); c.setConnectTimeout(30000);c.setReadTimeout(60000);c.setRequestProperty("User-Agent","MOTORVAULT/1.2");c.getInputStream().use { input -> f.outputStream().use { output -> input.copyTo(output) } };require(f.length()>0){"Empty image $name"} } }
   val glbs=mapOf(
    "spectral_gt_rs_game_ready.glb" to "https://raw.githubusercontent.com/JaronKBragg7337/spectral-gt-rs/main/spectral_gt_rs_game_ready.glb",
    "car_concept.glb" to "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/CarConcept/glTF-Binary/CarConcept.glb",
    "toy_car.glb" to "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/ToyCar/glTF-Binary/ToyCar.glb"
   )
-  glbs.forEach{(name,url)->val f=models.resolve(name);if(!f.exists()||f.length()==0L){val c=java.net.URL(url).openConnection();c.connectTimeout=30000;c.readTimeout=120000;c.setRequestProperty("User-Agent","MOTORVAULT/1.2");c.getInputStream().use{i->f.outputStream().use{o->i.copyTo(o)}};require(f.length()>1000L){"Invalid GLB $name"}}}
+  glbs.forEach{(name,url)->val f=models.resolve(name);if(!f.exists()||f.length()==0L){val c=URL(url).openConnection();c.setConnectTimeout(30000);c.setReadTimeout(120000);c.setRequestProperty("User-Agent","MOTORVAULT/1.2");c.getInputStream().use { input -> f.outputStream().use { output -> input.copyTo(output) } };require(f.length()>1000L){"Invalid GLB $name"}}}
  }
 }
 tasks.named("preBuild").configure{dependsOn(fetchVehicleLibrary)}
