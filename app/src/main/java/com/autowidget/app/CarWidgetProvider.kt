@@ -28,7 +28,7 @@ class CarWidgetProvider: AppWidgetProvider() {
         fun render(context:Context,manager:AppWidgetManager,id:Int) {
             val prefs=context.getSharedPreferences("auto_widget",Context.MODE_PRIVATE)
             val ids=CarCatalog.cars.map{it.id}
-            val selected=prefs.getString("default_car","sports") ?: "sports"
+            val selected=prefs.getString("default_car","spectral") ?: "spectral"
             val animated=prefs.getBoolean("animate_any",false)
             val car=if(animated) {
                 val index=((System.currentTimeMillis()/4500L)%ids.size).toInt()
