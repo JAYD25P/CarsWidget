@@ -27,7 +27,9 @@ val fetchVehicleLibrary by tasks.registering {
    "car_topdown.png" to "https://opengameart.org/sites/default/files/sports-car_0.png",
    "spectral_gt_beauty.png" to "https://raw.githubusercontent.com/JaronKBragg7337/spectral-gt-rs/main/spectral_gt_beauty.png",
    "spectral_gt_night.png" to "https://raw.githubusercontent.com/JaronKBragg7337/spectral-gt-rs/main/spectral_gt_night.png",
-   "spectral_gt_profile.png" to "https://raw.githubusercontent.com/JaronKBragg7337/spectral-gt-rs/main/spectral_gt_profile.png"
+   "spectral_gt_profile.png" to "https://raw.githubusercontent.com/JaronKBragg7337/spectral-gt-rs/main/spectral_gt_profile.png",
+   "car_concept_preview.jpg" to "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/CarConcept/screenshot/screenshot_Large.jpg",
+   "toy_car_preview.jpg" to "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/ToyCar/screenshot/screenshot_large.jpg"
   )
   images.forEach{(name,url)-> val f=drawable.resolve(name); if(!f.exists()||f.length()==0L){ val c=java.net.URL(url).openConnection(); c.connectTimeout=30000;c.readTimeout=60000;c.setRequestProperty("User-Agent","MOTORVAULT/1.2");c.getInputStream().use{i->f.outputStream().use{o->i.copyTo(o)}};require(f.length()>0){"Empty image $name"} } }
   val glbs=mapOf(
